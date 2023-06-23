@@ -1,5 +1,11 @@
-.container .btn-custom {
+.container {
     margin-top: 5px;
+    .btn-custom {
+    margin-top: 1px;
     margin-right: 15px;
     margin-left: 10px;
+    }
+    .btn-add {
+        margin-top: 5px;
+    }
 }

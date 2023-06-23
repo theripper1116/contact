@@ -13,7 +13,8 @@ export class AppComponent implements OnInit {
   contactsList: Contact[] = [];
   isAdd = false;
   form!: FormGroup;
-  isUpdate = false;
+  enableEditIndex = null;
+  isEditing: boolean = false;
 
   constructor(public contactService: ContactsService) {}
 
@@ -49,8 +50,14 @@ export class AppComponent implements OnInit {
   }
 
   update(id: number) {
-    this.isUpdate = true;
-    // this.contactsList.find(item => item.id !== id);
+    this.isEditing = false;
+    this.enableEditIndex = null;
+    console.log(this.form.value);
+  }
+
+  switchEditMode(i: any) {
+    this.isEditing = true;
+    this.enableEditIndex = i;
   }
 
   delete(id: number) {

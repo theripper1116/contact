@@ -1,4 +1,5 @@
 <div class="container">
+  <form [formGroup]="form">
   <table>
     <thead>
       <tr>
@@ -9,19 +10,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let contact of contactsList; let i = index;">
-        <td>{{(isUpdated && i === id) ? <input formControlName="firstName" id="firstName" type="text" class="form-control"> : contact.firstName}}</td>
-        <td>(isUpdated && i === id) ? <input formControlName="lastName" id="lastName" type="text" class="form-control"> {{contact.lastName}}</td>
-        <td>(isUpdated && i === id) ? <input formControlName="phone" id="phone" type="text" class="form-control"> {{contact.phone}}</td>
-        <td>
-          <button class="btn-custom" (click)="update(contact.id)">Update</button>
-          <button class="btn-custom" (click)="delete(contact.id)">Delete</button>
-        </td>
-      </tr>
+      <ng-container *ngFor="let contact of contactsList; index as i;">
+        <tr>
+          <th scope="row">{{contact.id}}</th>
+          <ng-container *ngIf="enableEditIndex != i">
+            <td>{{contact.firstName}}</td>
+            <td>{{contact.lastName}}</td>
+            <td>{{contact.phone}}</td>
+            <td *ngIf="enableEditIndex != i">
+              <button type="button" (click)="switchEditMode(i)">Edit</button>
+            </td>
+            <button class="btn-custom" (click)="delete(contact.id)">Delete</button>
+          </ng-container>
+          <ng-container *ngIf="enableEditIndex == i">
+            <td><input id="firstName" type="text" class="form-control" formControlName="firstName" /></td>
+            <td><input formControlName="lastName" /></td>
+            <td><input formControlName="phone" /></td>
+            <td><button (click)="update(i)">Update</button></td>
+            <button class="btn-custom" (click)="delete(contact.id)">Delete</button>
+          </ng-container>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
-  <form [formGroup]="form">
-    <!-- <div *ngIf="isAdd"> -->
       <div class="form-group">
         <label for="firstName">FirstName:</label>
         <input formControlName="firstName" id="firstName" type="text" class="form-control">
@@ -45,9 +56,8 @@
             <div *ngIf="f['phone'].errors && f['phone'].errors['required']">Phone is required.</div>
         </div>
       </div>
-    <!-- </div> -->
     <div>
-      <button class="btn-custom" [disabled]="form.invalid" (click)="add()">Add</button>
+      <button class="btn-add" [disabled]="form.invalid" (click)="add()">Add</button>
       
     </div>
   </form>
